@@ -54,10 +54,7 @@ jQuery.tableDnD = {
   oldX: 0,
   oldY: 0,
 
-  /** Actually build the structure */
   build: function (options) {
-    // Set up the defaults if any
-
     this.each(function () {
       // This is bound to each matching table, set up the defaults and override with user options
       this.tableDnDConfig = $.extend({
@@ -100,34 +97,34 @@ jQuery.tableDnD = {
     return this
   },
   makeIndented: function (table) {
-    var config = table.tableDnDConfig,
-      rows = table.rows,
-      firstCell = $(rows).first().find('td:first')[0],
-      indentLevel = 0,
-      cellWidth = 0,
-      longestCell,
-      tableStyle
+    const config = table.tableDnDConfig
+    const rows = table.rows
+    const firstCell = $(rows).first().find('td:first')[0]
+    let indentLevel = 0
+    let cellWidth = 0
+    let longestCell
+    const tableStyle = $(table).addClass('indtd').attr('style')
 
-    if ($(table).hasClass('indtd'))
-      return null
-
-    tableStyle = $(table).addClass('indtd').attr('style')
     $(table).css({whiteSpace: 'nowrap'})
 
-    for (var w = 0; w < rows.length; w++) {
+    for (let w = 0; w < rows.length; w++) {
       if (cellWidth < $(rows[w]).find('td:first').text().length) {
         cellWidth = $(rows[w]).find('td:first').text().length
         longestCell = w
       }
     }
+
     $(firstCell).css({width: 'auto'})
-    for (w = 0; w < config.hierarchyLevel; w++)
+    for (let w = 0; w < config.hierarchyLevel; w++) {
       $(rows[longestCell]).find('td:first').prepend(config.indentArtifact)
+    }
+
     firstCell && $(firstCell).css({width: firstCell.offsetWidth})
     tableStyle && $(table).css(tableStyle)
 
-    for (w = 0; w < config.hierarchyLevel; w++)
+    for (let w = 0; w < config.hierarchyLevel; w++) {
       $(rows[longestCell]).find('td:first').children(':first').remove()
+    }
 
     config.hierarchyLevel
             && $(rows).each(function () {
